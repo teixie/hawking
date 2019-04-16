@@ -40,7 +40,7 @@ func SetLocation(loc *time.Location) {
 	local = loc
 }
 
-// 获取时区
+// 获得时区
 func GetLocation() *time.Location {
 	if local != nil {
 		return local
@@ -48,28 +48,28 @@ func GetLocation() *time.Location {
 	return time.Local
 }
 
-// 获取当前时间
+// 获得当前时间
 func Now() Hawking {
 	return Hawking{time.Now().In(GetLocation())}
 }
 
-// 获取今天的起始时间
+// 获得今天的开始时间
 func Today() Hawking {
-	timeStr := Now().Time().Format("2006-01-02")
+	timeStr := time.Now().In(GetLocation()).Format("2006-01-02")
 	t, _ := time.ParseInLocation("2006-01-02", timeStr, GetLocation())
 	return Hawking{t}
 }
 
-// 获取明天的起始时间
+// 获得明天的开始时间
 func Tomorrow() Hawking {
-	timeStr := Now().Time().Add(24 * time.Hour).Format("2006-01-02")
+	timeStr := time.Now().In(GetLocation()).Add(24 * time.Hour).Format("2006-01-02")
 	t, _ := time.ParseInLocation("2006-01-02", timeStr, GetLocation())
 	return Hawking{t}
 }
 
-// 获取昨天的起始时间
+// 获得昨天的开始时间
 func Yesterday() Hawking {
-	timeStr := Now().Time().Add(-24 * time.Hour).Format("2006-01-02")
+	timeStr := time.Now().In(GetLocation()).Add(-24 * time.Hour).Format("2006-01-02")
 	t, _ := time.ParseInLocation("2006-01-02", timeStr, GetLocation())
 	return Hawking{t}
 }
