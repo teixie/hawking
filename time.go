@@ -13,6 +13,7 @@ type Hawking struct {
 	t time.Time
 }
 
+// 时间格式化，支持"Y-m-d H:i:s"、"YYYY-mm-dd HH:ii:ss"等形式
 func (h Hawking) Format(fmtStr string) string {
 	timeStr := h.t.String()
 	o := map[string]string{
@@ -31,8 +32,20 @@ func (h Hawking) Format(fmtStr string) string {
 	return fmtStr
 }
 
+// 获得Golang的time.Time类型的时间
 func (h Hawking) Time() time.Time {
 	return h.t
+}
+
+// 获得时间戳
+func (h Hawking) Unix() int64 {
+	return h.t.Unix()
+}
+
+// 增加时间
+func (h Hawking) Add(d time.Duration) Hawking {
+	h.t = h.t.Add(d)
+	return h
 }
 
 // 设置时区
