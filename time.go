@@ -102,6 +102,35 @@ func Yesterday() Hawking {
 	return Hawking{t}
 }
 
+// 当前时间所在星期的开始时间，例："2006-01-02 00:00:00"
+func StartOfWeek() Hawking {
+	now := time.Now().In(GetLocation())
+	timeStr := now.Add(-(time.Duration(now.Weekday()) - 1) * 24 * time.Hour).Format(timeLayoutYmd)
+	t, _ := time.ParseInLocation(timeLayoutYmd, timeStr, GetLocation())
+	return Hawking{t}
+}
+
+// 当前时间所在星期的结束时间，例："2006-01-02 23:59:59"
+func EndOfWeek() Hawking {
+	now := time.Now().In(GetLocation())
+	timeStr := now.Add((7 - time.Duration(now.Weekday())) * 24 * time.Hour).Format(timeLayoutYmd)
+	t, _ := time.ParseInLocation(timeLayoutYmdHis, timeStr+" 23:59:59", GetLocation())
+	return Hawking{t}
+}
+
+// 当前时间所在月的开始时间，例："2016-01-01 00:00:00"
+func StartOfMonth() Hawking {
+	now := time.Now().In(GetLocation())
+	return Hawking{time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, GetLocation())}
+}
+
+// 当前时间所在月的结束时间，例："2016-01-31 23:59:59"
+func EndOfMonth() Hawking {
+	now := time.Now().In(GetLocation())
+	next := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, GetLocation()).Add(31 * 24 * time.Hour)
+	return Hawking{time.Unix(time.Date(next.Year(), next.Month(), 1, 0, 0, 0, 0, GetLocation()).Unix()-1, 0)}
+}
+
 // 解析时间，支持Hawking/time.Time/时间字符串/时间戳
 func Parse(t interface{}) Hawking {
 	if t == nil {
