@@ -18,8 +18,13 @@ type Hawking struct {
 	t time.Time
 }
 
-// 时间格式化，支持"Y-m-d H:i:s"、"YYYY-mm-dd HH:ii:ss"等形式
+// 时间格式化，支持"Y-m-d H:i:s"、"YYYY-mm-dd HH:ii:ss"等形式，当不包含任何"YymdHis"字符时将使用原生方式
 func (h Hawking) Format(fmtStr string) string {
+	exists, err := regexp.Match("[YymdHis]+", []byte(fmtStr))
+	if err == nil && !exists {
+		return h.t.Format(fmtStr)
+	}
+
 	timeStr := h.t.String()
 	o := map[string]string{
 		"Y+": timeStr[0:4],
