@@ -102,8 +102,8 @@ func Yesterday() Hawking {
 	return Hawking{t}
 }
 
-// 构建时间，支持Hawking/time.Time/时间字符串/时间戳
-func Make(t interface{}) Hawking {
+// 解析时间，支持Hawking/time.Time/时间字符串/时间戳
+func Parse(t interface{}) Hawking {
 	if t == nil {
 		return Hawking{}
 	}
