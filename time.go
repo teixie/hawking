@@ -5,6 +5,11 @@ import (
 	"time"
 )
 
+const (
+	timeLayoutYmdHis = "2006-01-02 15:04:05"
+	timeLayoutYmd    = "2006-01-02"
+)
+
 var (
 	local *time.Location
 )
@@ -48,6 +53,11 @@ func (h Hawking) Add(d time.Duration) Hawking {
 	return h
 }
 
+// 时间是否为0
+func (h Hawking) IsZero() bool {
+	return h.t.IsZero()
+}
+
 // 设置时区
 func SetLocation(loc *time.Location) {
 	local = loc
@@ -68,21 +78,46 @@ func Now() Hawking {
 
 // 获得今天的开始时间
 func Today() Hawking {
-	timeStr := time.Now().In(GetLocation()).Format("2006-01-02")
-	t, _ := time.ParseInLocation("2006-01-02", timeStr, GetLocation())
+	timeStr := time.Now().In(GetLocation()).Format(timeLayoutYmd)
+	t, _ := time.ParseInLocation(timeLayoutYmd, timeStr, GetLocation())
 	return Hawking{t}
 }
 
 // 获得明天的开始时间
 func Tomorrow() Hawking {
-	timeStr := time.Now().In(GetLocation()).Add(24 * time.Hour).Format("2006-01-02")
-	t, _ := time.ParseInLocation("2006-01-02", timeStr, GetLocation())
+	timeStr := time.Now().In(GetLocation()).Add(24 * time.Hour).Format(timeLayoutYmd)
+	t, _ := time.ParseInLocation(timeLayoutYmd, timeStr, GetLocation())
 	return Hawking{t}
 }
 
 // 获得昨天的开始时间
 func Yesterday() Hawking {
-	timeStr := time.Now().In(GetLocation()).Add(-24 * time.Hour).Format("2006-01-02")
-	t, _ := time.ParseInLocation("2006-01-02", timeStr, GetLocation())
+	timeStr := time.Now().In(GetLocation()).Add(-24 * time.Hour).Format(timeLayoutYmd)
+	t, _ := time.ParseInLocation(timeLayoutYmd, timeStr, GetLocation())
 	return Hawking{t}
+}
+
+// 构建时间，支持Hawking/time.Time/时间字符串/时间戳
+func Make(t interface{}) Hawking {
+	if t == nil {
+		return Hawking{}
+	}
+
+	switch t.(type) {
+	case Hawking:
+		return t.(Hawking)
+	case time.Time:
+		return Hawking{t.(time.Time)}
+	case string:
+		r, err := time.ParseInLocation(timeLayoutYmdHis, t.(string), GetLocation())
+		if err == nil {
+			return Hawking{r}
+		}
+	case int:
+		return Hawking{time.Unix(int64(t.(int)), 0)}
+	case int64:
+		return Hawking{time.Unix(t.(int64), 0)}
+	}
+
+	return Hawking{}
 }
