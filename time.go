@@ -180,9 +180,7 @@ func Parse(t interface{}) Hawking {
 // 获取第一个或者当前时间
 func getFirstOrNow(args []interface{}) time.Time {
 	if len(args) > 0 {
-		if t := Parse(args[0]); !t.IsZero() {
-			return t.Time()
-		}
+		return Parse(args[0]).Time()
 	}
 
 	return time.Now().In(GetLocation())
