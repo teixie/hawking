@@ -67,6 +67,16 @@ func (h Hawking) String() string {
 	return h.t.String()
 }
 
+// 所在天的开始时间，如："2006-01-01 00:00:00"
+func (h Hawking) StartOfDay() Hawking {
+	return Hawking{time.Date(h.t.Year(), h.t.Month(), h.t.Day(), 0, 0, 0, 0, GetLocation())}
+}
+
+// 所在天的结束时间，如："2006-01-01 23:59:59"
+func (h Hawking) EndOfDay() Hawking {
+	return Hawking{time.Date(h.t.Year(), h.t.Month(), h.t.Day(), 23, 59, 59, 0, GetLocation())}
+}
+
 // 设置时区
 func SetLocation(loc *time.Location) {
 	local = loc
@@ -128,6 +138,17 @@ func EndOfMonth() Hawking {
 	now := time.Now().In(GetLocation())
 	next := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, GetLocation()).Add(31 * 24 * time.Hour)
 	return Hawking{time.Unix(time.Date(next.Year(), next.Month(), 1, 0, 0, 0, 0, GetLocation()).Unix()-1, 0)}
+}
+
+// 当前时间所在年的开始时间，例："2016-01-01 00:00:00"
+func StartOfYear() Hawking {
+	now := time.Now().In(GetLocation())
+	return Hawking{time.Date(now.Year(), 1, 1, 0, 0, 0, 0, GetLocation())}
+}
+
+// 当前时间所在年的结束时间，例："2016-12-31 23:59:59"
+func EndOfYear() Hawking {
+	return Hawking{time.Date(time.Now().In(GetLocation()).Year(), 12, 31, 23, 59, 59, 0, GetLocation())}
 }
 
 // 解析时间，支持Hawking/time.Time/时间字符串/时间戳
