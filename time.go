@@ -102,53 +102,54 @@ func Today() Hawking {
 }
 
 // 获得明天的开始时间
-func Tomorrow() Hawking {
-	t := time.Now().In(GetLocation()).Add(24 * time.Hour)
+func Tomorrow(args ...interface{}) Hawking {
+	t := getFirstOrNow(args).Add(24 * time.Hour)
 	return Hawking{time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, GetLocation())}
 }
 
 // 获得昨天的开始时间
-func Yesterday() Hawking {
-	t := time.Now().In(GetLocation()).Add(-24 * time.Hour)
+func Yesterday(args ...interface{}) Hawking {
+	t := getFirstOrNow(args).Add(-24 * time.Hour)
 	return Hawking{time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, GetLocation())}
 }
 
 // 当前时间所在星期的开始时间，例："2006-01-02 00:00:00"
-func StartOfWeek() Hawking {
-	now := time.Now().In(GetLocation())
+func StartOfWeek(args ...interface{}) Hawking {
+	now := getFirstOrNow(args)
 	t := now.Add(-(time.Duration(now.Weekday()) - 1) * 24 * time.Hour)
 	return Hawking{time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, GetLocation())}
 }
 
 // 当前时间所在星期的结束时间，例："2006-01-02 23:59:59"
-func EndOfWeek() Hawking {
-	now := time.Now().In(GetLocation())
+func EndOfWeek(args ...interface{}) Hawking {
+	now := getFirstOrNow(args)
 	t := now.Add((7 - time.Duration(now.Weekday())) * 24 * time.Hour)
 	return Hawking{time.Date(t.Year(), t.Month(), t.Day(), 23, 59, 59, 0, GetLocation())}
 }
 
 // 当前时间所在月的开始时间，例："2016-01-01 00:00:00"
-func StartOfMonth() Hawking {
-	now := time.Now().In(GetLocation())
+func StartOfMonth(args ...interface{}) Hawking {
+	now := getFirstOrNow(args)
 	return Hawking{time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, GetLocation())}
 }
 
 // 当前时间所在月的结束时间，例："2016-01-31 23:59:59"
-func EndOfMonth() Hawking {
-	now := time.Now().In(GetLocation())
+func EndOfMonth(args ...interface{}) Hawking {
+	now := getFirstOrNow(args)
 	next := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, GetLocation()).Add(31 * 24 * time.Hour)
 	return Hawking{time.Unix(time.Date(next.Year(), next.Month(), 1, 0, 0, 0, 0, GetLocation()).Unix()-1, 0)}
 }
 
 // 当前时间所在年的开始时间，例："2016-01-01 00:00:00"
-func StartOfYear() Hawking {
-	now := time.Now().In(GetLocation())
+func StartOfYear(args ...interface{}) Hawking {
+	now := getFirstOrNow(args)
 	return Hawking{time.Date(now.Year(), 1, 1, 0, 0, 0, 0, GetLocation())}
 }
 
 // 当前时间所在年的结束时间，例："2016-12-31 23:59:59"
-func EndOfYear() Hawking {
-	return Hawking{time.Date(time.Now().In(GetLocation()).Year(), 12, 31, 23, 59, 59, 0, GetLocation())}
+func EndOfYear(args ...interface{}) Hawking {
+	now := getFirstOrNow(args)
+	return Hawking{time.Date(now.Year(), 12, 31, 23, 59, 59, 0, GetLocation())}
 }
 
 // 解析时间，支持Hawking/time.Time/时间字符串/时间戳
@@ -174,4 +175,15 @@ func Parse(t interface{}) Hawking {
 	}
 
 	return Hawking{}
+}
+
+// 获取第一个或者当前时间
+func getFirstOrNow(args []interface{}) time.Time {
+	if len(args) > 0 {
+		if t := Parse(args[0]); !t.IsZero() {
+			return t.Time()
+		}
+	}
+
+	return time.Now().In(GetLocation())
 }
