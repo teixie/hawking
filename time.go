@@ -7,7 +7,6 @@ import (
 
 const (
 	timeLayoutYmdHis = "2006-01-02 15:04:05"
-	timeLayoutYmd    = "2006-01-02"
 )
 
 var (
@@ -63,6 +62,11 @@ func (h Hawking) IsZero() bool {
 	return h.t.IsZero()
 }
 
+// 转化为字符串
+func (h Hawking) String() string {
+	return h.t.String()
+}
+
 // 设置时区
 func SetLocation(loc *time.Location) {
 	local = loc
@@ -83,39 +87,34 @@ func Now() Hawking {
 
 // 获得今天的开始时间
 func Today() Hawking {
-	timeStr := time.Now().In(GetLocation()).Format(timeLayoutYmd)
-	t, _ := time.ParseInLocation(timeLayoutYmd, timeStr, GetLocation())
-	return Hawking{t}
+	t := time.Now().In(GetLocation())
+	return Hawking{time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, GetLocation())}
 }
 
 // 获得明天的开始时间
 func Tomorrow() Hawking {
-	timeStr := time.Now().In(GetLocation()).Add(24 * time.Hour).Format(timeLayoutYmd)
-	t, _ := time.ParseInLocation(timeLayoutYmd, timeStr, GetLocation())
-	return Hawking{t}
+	t := time.Now().In(GetLocation()).Add(24 * time.Hour)
+	return Hawking{time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, GetLocation())}
 }
 
 // 获得昨天的开始时间
 func Yesterday() Hawking {
-	timeStr := time.Now().In(GetLocation()).Add(-24 * time.Hour).Format(timeLayoutYmd)
-	t, _ := time.ParseInLocation(timeLayoutYmd, timeStr, GetLocation())
-	return Hawking{t}
+	t := time.Now().In(GetLocation()).Add(-24 * time.Hour)
+	return Hawking{time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, GetLocation())}
 }
 
 // 当前时间所在星期的开始时间，例："2006-01-02 00:00:00"
 func StartOfWeek() Hawking {
 	now := time.Now().In(GetLocation())
-	timeStr := now.Add(-(time.Duration(now.Weekday()) - 1) * 24 * time.Hour).Format(timeLayoutYmd)
-	t, _ := time.ParseInLocation(timeLayoutYmd, timeStr, GetLocation())
-	return Hawking{t}
+	t := now.Add(-(time.Duration(now.Weekday()) - 1) * 24 * time.Hour)
+	return Hawking{time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, GetLocation())}
 }
 
 // 当前时间所在星期的结束时间，例："2006-01-02 23:59:59"
 func EndOfWeek() Hawking {
 	now := time.Now().In(GetLocation())
-	timeStr := now.Add((7 - time.Duration(now.Weekday())) * 24 * time.Hour).Format(timeLayoutYmd)
-	t, _ := time.ParseInLocation(timeLayoutYmdHis, timeStr+" 23:59:59", GetLocation())
-	return Hawking{t}
+	t := now.Add((7 - time.Duration(now.Weekday())) * 24 * time.Hour)
+	return Hawking{time.Date(t.Year(), t.Month(), t.Day(), 23, 59, 59, 0, GetLocation())}
 }
 
 // 当前时间所在月的开始时间，例："2016-01-01 00:00:00"
