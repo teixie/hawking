@@ -77,6 +77,46 @@ func (h Hawking) EndOfDay() Hawking {
 	return Hawking{time.Date(h.t.Year(), h.t.Month(), h.t.Day(), 23, 59, 59, 0, GetLocation())}
 }
 
+// 明天
+func (h Hawking) Tomorrow() Hawking{
+	return Tomorrow(h)
+}
+
+// 昨天
+func (h Hawking) Yesterday() Hawking{
+	return Yesterday(h)
+}
+
+// 所在周的开始时间，如："2006-01-01 00:00:00"
+func (h Hawking) StartOfWeek() Hawking{
+	return StartOfWeek(h)
+}
+
+// 所在周的结束时间，如："2006-01-01 23:59:59"
+func (h Hawking) EndOfWeek() Hawking{
+	return EndOfWeek(h)
+}
+
+// 所在月的开始时间，如："2006-01-01 00:00:00"
+func (h Hawking) StartOfMonth() Hawking{
+	return StartOfMonth(h)
+}
+
+// 所在月的结束时间，如："2006-01-01 23:59:59"
+func (h Hawking) EndOfMonth() Hawking {
+	return EndOfMonth(h)
+}
+
+// 所在年的开始时间，如："2006-01-01 00:00:00"
+func (h Hawking) StartOfYear() Hawking{
+	return StartOfYear(h)
+}
+
+// 所在年的结束时间，如："2006-12-31 23:59:59"
+func (h Hawking) EndOfYear() Hawking{
+	return EndOfYear(h)
+}
+
 // 设置时区
 func SetLocation(loc *time.Location) {
 	local = loc
