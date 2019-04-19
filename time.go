@@ -67,16 +67,6 @@ func (h Hawking) String() string {
 	return h.t.String()
 }
 
-// 所在天的开始时间，如："2006-01-01 00:00:00"
-func (h Hawking) StartOfDay() Hawking {
-	return Hawking{time.Date(h.t.Year(), h.t.Month(), h.t.Day(), 0, 0, 0, 0, GetLocation())}
-}
-
-// 所在天的结束时间，如："2006-01-01 23:59:59"
-func (h Hawking) EndOfDay() Hawking {
-	return Hawking{time.Date(h.t.Year(), h.t.Month(), h.t.Day(), 23, 59, 59, 0, GetLocation())}
-}
-
 // 明天
 func (h Hawking) Tomorrow() Hawking{
 	return Tomorrow(h)
@@ -85,6 +75,16 @@ func (h Hawking) Tomorrow() Hawking{
 // 昨天
 func (h Hawking) Yesterday() Hawking{
 	return Yesterday(h)
+}
+
+// 所在天的开始时间，如："2006-01-01 00:00:00"
+func (h Hawking) StartOfDay() Hawking {
+	return Hawking{time.Date(h.t.Year(), h.t.Month(), h.t.Day(), 0, 0, 0, 0, GetLocation())}
+}
+
+// 所在天的结束时间，如："2006-01-01 23:59:59"
+func (h Hawking) EndOfDay() Hawking {
+	return Hawking{time.Date(h.t.Year(), h.t.Month(), h.t.Day(), 23, 59, 59, 0, GetLocation())}
 }
 
 // 所在周的开始时间，如："2006-01-01 00:00:00"
