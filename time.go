@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	timeLayoutYmdHis = "2006-01-02 15:04:05"
+	YmdHis = "2006-01-02 15:04:05"
 )
 
 var (
@@ -68,12 +68,12 @@ func (h Hawking) String() string {
 }
 
 // 明天
-func (h Hawking) Tomorrow() Hawking{
+func (h Hawking) Tomorrow() Hawking {
 	return Tomorrow(h)
 }
 
 // 昨天
-func (h Hawking) Yesterday() Hawking{
+func (h Hawking) Yesterday() Hawking {
 	return Yesterday(h)
 }
 
@@ -88,17 +88,17 @@ func (h Hawking) EndOfDay() Hawking {
 }
 
 // 所在周的开始时间，如："2006-01-01 00:00:00"
-func (h Hawking) StartOfWeek() Hawking{
+func (h Hawking) StartOfWeek() Hawking {
 	return StartOfWeek(h)
 }
 
 // 所在周的结束时间，如："2006-01-01 23:59:59"
-func (h Hawking) EndOfWeek() Hawking{
+func (h Hawking) EndOfWeek() Hawking {
 	return EndOfWeek(h)
 }
 
 // 所在月的开始时间，如："2006-01-01 00:00:00"
-func (h Hawking) StartOfMonth() Hawking{
+func (h Hawking) StartOfMonth() Hawking {
 	return StartOfMonth(h)
 }
 
@@ -108,12 +108,12 @@ func (h Hawking) EndOfMonth() Hawking {
 }
 
 // 所在年的开始时间，如："2006-01-01 00:00:00"
-func (h Hawking) StartOfYear() Hawking{
+func (h Hawking) StartOfYear() Hawking {
 	return StartOfYear(h)
 }
 
 // 所在年的结束时间，如："2006-12-31 23:59:59"
-func (h Hawking) EndOfYear() Hawking{
+func (h Hawking) EndOfYear() Hawking {
 	return EndOfYear(h)
 }
 
@@ -204,7 +204,7 @@ func Parse(t interface{}) Hawking {
 	case time.Time:
 		return Hawking{t.(time.Time)}
 	case string:
-		r, err := time.ParseInLocation(timeLayoutYmdHis, t.(string), GetLocation())
+		r, err := time.ParseInLocation(YmdHis, t.(string), GetLocation())
 		if err == nil {
 			return Hawking{r}
 		}
